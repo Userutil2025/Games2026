@@ -1,171 +1,669 @@
 <!DOCTYPE html>
-<!-- saved from url=(0051)https://userutil2025.github.io/Fain/pensionare.html -->
-<html lang="ro"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="https://raw.githubusercontent.com/Userutil2025/simplu/main/pensionare.html">--><!--<base href=".">--><!--<base href=".">--><!--<base href=".">--><base href=".">
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Pensie - România</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculator an pensionare</title>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .form-section {
+            padding: 25px;
+            background: var(--light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .form-section h3 {
+            color: var(--dark);
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section h3::before {
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--dark);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid var(--border);
+        }
+
+        .btn-reset:hover {
+            background: var(--border);
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .results.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .result-card.success {
+            border-left-color: var(--success);
+        }
+
+        .result-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .result-card.info {
+            border-left-color: var(--primary);
+        }
+
+        .result-label {
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            color: var(--dark);
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .result-unit {
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .main-result {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: none;
+            text-align: center;
+        }
+
+        .main-result .result-label {
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-result .result-value {
+            color: white;
+            font-size: 36px;
+            margin-top: 10px;
+        }
+
+        .details-section {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .error {
+            display: none;
+            padding: 15px;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid var(--danger);
+        }
+
+        .error.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message {
+            display: none;
+            padding: 15px;
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid var(--success);
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #1e40af;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .contact {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .contact a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .contact a:hover {
+            color: var(--secondary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-badge.warning {
+            background: var(--warning);
+        }
+    </style>
 </head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>📊 Calculator Pensie</h1>
+                <p>Calculează cu ușurință când te poți pensiona în România</p>
+            </div>
 
-<body style="
-margin:0;
-font-family:Arial, sans-serif;
-color:white;
+            <div class="content">
+                <div class="error" id="error"></div>
+                <div class="success-message" id="success"></div>
 
-background:#66CC99 url(&#39;https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&amp;fit=crop&amp;w=1920&amp;q=80&#39;) no-repeat center center / cover;
-min-height:100vh;
+                <form id="pensionForm">
+                    <div class="form-grid">
+                        <!-- Secțiunea 1: Date Personale -->
+                        <div class="form-section">
+                            <h3>👤 Date Personale</h3>
+                            <div class="form-group">
+                                <label for="lunaN">Luna nașterii</label>
+                                <select id="lunaN" required>
+                                    <option value="">Selectează luna...</option>
+                                    <option value="1">ianuarie</option>
+                                    <option value="2">februarie</option>
+                                    <option value="3">martie</option>
+                                    <option value="4">aprilie</option>
+                                    <option value="5">mai</option>
+                                    <option value="6">iunie</option>
+                                    <option value="7">iulie</option>
+                                    <option value="8">august</option>
+                                    <option value="9">septembrie</option>
+                                    <option value="10">octombrie</option>
+                                    <option value="11">noiembrie</option>
+                                    <option value="12">decembrie</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="anN">Anul nașterii</label>
+                                <input type="number" id="anN" placeholder="Ex: 1964" min="1920" max="2010" required>
+                                <div class="input-hint">Anii 1920-2010</div>
+                            </div>
+                        </div>
 
-display:flex;
-justify-content:center;
-align-items:flex-start;
+                        <!-- Secțiunea 2: Date Angajare -->
+                        <div class="form-section">
+                            <h3>💼 Început Cotizare</h3>
+                            <div class="form-group">
+                                <label for="lunaM">Luna angajării</label>
+                                <select id="lunaM" required>
+                                    <option value="">Selectează luna...</option>
+                                    <option value="1">ianuarie</option>
+                                    <option value="2">februarie</option>
+                                    <option value="3">martie</option>
+                                    <option value="4">aprilie</option>
+                                    <option value="5">mai</option>
+                                    <option value="6">iunie</option>
+                                    <option value="7">iulie</option>
+                                    <option value="8">august</option>
+                                    <option value="9">septembrie</option>
+                                    <option value="10">octombrie</option>
+                                    <option value="11">noiembrie</option>
+                                    <option value="12">decembrie</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="anM">Anul angajării</label>
+                                <input type="number" id="anM" placeholder="Ex: 1986" min="1920" max="2010" required>
+                                <div class="input-hint">Anii 1920-2010</div>
+                            </div>
+                        </div>
+                    </div>
 
-padding:20px;
-box-sizing:border-box;
-">
+                    <div class="button-group">
+                        <button type="submit" class="btn-calculate">🔍 Calculează Pensia</button>
+                        <button type="reset" class="btn-reset">↺ Resetează</button>
+                    </div>
+                </form>
 
-<div class="container" style="
-width:100%;
-max-width:420px;
-background:rgba(0,0,0,0.35);
-padding:20px;
-border-radius:14px;
-backdrop-filter:blur(6px);
-box-sizing:border-box;
-">
+                <!-- Rezultate -->
+                <div class="results" id="results">
+                    <div class="result-card main-result">
+                        <div class="result-label">Data pensionării</div>
+                        <div class="result-value" id="pensionDate">-</div>
+                        <div id="ageAtPension" style="margin-top: 10px; font-size: 16px;"></div>
+                    </div>
 
-<h1 style="text-align:center; font-size:22px;">Calcul an de pensionare</h1>
+                    <div class="result-card success">
+                        <div class="result-label">Ani lucrați</div>
+                        <div class="result-value"><span id="yearsWorked">-</span> <span class="result-unit">ani</span></div>
+                    </div>
 
-<label>Luna și anul nașterii:</label>
-<input type="number" id="lunaN" placeholder="Luna (1-12)" min="1" max="12" style="width:95%; padding:10px; margin:5px 0 10px; border:none; border-radius:6px;">
+                    <div class="result-card info">
+                        <div class="result-label">Vârsta la pensionare</div>
+                        <div class="result-value"><span id="ageValue">-</span> <span class="result-unit">ani</span></div>
+                    </div>
 
-<input type="number" id="anN" placeholder="An (ex: 1964)" style="width:95%; padding:10px; margin:5px 0 10px; border:none; border-radius:6px;">
+                    <div class="result-card warning">
+                        <div class="result-label">Ani/Luni până la pensionare</div>
+                        <div class="result-value" id="timeLeft">-</div>
+                    </div>
 
-<label>Luna angajare:</label>
-<input type="number" id="lunaM" placeholder="Luna (1-12)" min="1" max="12" style="width:95%; padding:10px; margin:5px 0 10px; border:none; border-radius:6px;">
-<label>Din anul curent se scad toti anii lucrati:</label>
-<input type="number" id="anM" placeholder="An (ex: 2026-40=1986)" style="width:95%; padding:10px; margin:5px 0 10px; border:none; border-radius:6px;">
+                    <!-- Secțiune Detalii -->
+                    <div class="details-section" style="grid-column: 1 / -1;">
+                        <h3 style="margin-bottom: 15px; color: var(--dark); font-size: 16px;">📋 Detalii Calcul</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Data nașterii:</span>
+                            <span class="detail-value" id="birthDateDetail">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Data angajării:</span>
+                            <span class="detail-value" id="startWorkDetail">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Vârsta cu 60 de ani:</span>
+                            <span class="detail-value" id="age60Detail">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Vârsta cu 40 de ani de contribuție:</span>
+                            <span class="detail-value" id="age40Detail">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Condiția îndeplinită:</span>
+                            <span class="detail-value" id="condition">-</span>
+                        </div>
+                    </div>
 
-<button onclick="calculeaza()" style="
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:10px;
-border-radius:6px;
-border:none;
-font-size:16px;
-background-color:#66CC99;
-color:#000;
-font-weight:bold;
-cursor:pointer;
-">
-Calculează
-</button>
+                    <div class="info-box" style="grid-column: 1 / -1;">
+                        <strong>ℹ️ Informație importantă:</strong>
+                        Vârsta de pensionare în România se calculează după următoarea regulă: maximum dintre:
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>60 de ani</li>
+                            <li>40 de ani de contribuție</li>
+                        </ul>
+                        Datele prezentate sunt estimate și orientative. Pentru informații oficiale, contactează Agenția Națională de Pensii (ANP).
+                    </div>
+                </div>
+            </div>
 
-<h2 id="rezultat" style="text-align:center; margin-top:20px;"></h2>
+            <div class="contact">
+                📧 Pentru mai multe informații: <a href="mailto:utilnoua@gmail.com">utilnoua@gmail.com</a>
+            </div>
+        </div>
+    </div>
 
-<div style="text-align: center;">
-  <!-- <label>Contact : utilnoua@gmail.com</label> 
-  
-  
-  <a href="mailto:utilnoua@gmail.com" class="buton-email">
-  Contact: utilnoua@gmail.com
-</a>
- -->
-<a href="mailto:utilnoua@gmail.com" style="color: white; text-decoration: none;">
-  Contact: utilnoua@gmail.com
-</a>
+    <script>
+        const luni = [
+            "ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
+            "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"
+        ];
 
-</div>
+        const form = document.getElementById('pensionForm');
+        const resultsDiv = document.getElementById('results');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
 
-<script>
-function calculeaza(){
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            calculatePension();
+        });
 
-    const lunaN = parseInt(document.getElementById("lunaN").value);
-    const anN = parseInt(document.getElementById("anN").value);
+        function showError(message) {
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.classList.add('show');
+            successDiv.classList.remove('show');
+            resultsDiv.classList.remove('show');
+        }
 
-    const lunaM = parseInt(document.getElementById("lunaM").value);
-    const anM = parseInt(document.getElementById("anM").value);
+        function showSuccess(message) {
+            successDiv.textContent = '✅ ' + message;
+            successDiv.classList.add('show');
+            errorDiv.classList.remove('show');
+        }
 
-    if(!lunaN || !anN || !lunaM || !anM){
-        document.getElementById("rezultat").innerText =
-        "Completați toate câmpurile.";
-        return;
-    }
+        function formatDate(date) {
+            return luni[date.getMonth()] + ' ' + date.getFullYear();
+        }
 
-    if(lunaN < 1 || lunaN > 12 || lunaM < 1 || lunaM > 12){
-        document.getElementById("rezultat").innerText =
-        "Luna trebuie să fie între 1 și 12.";
-        return;
-    }
+        function calculatePension() {
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
 
-    const nastere = new Date(anN, lunaN - 1, 1);
-    const munca = new Date(anM, lunaM - 1, 1);
+            const lunaN = parseInt(document.getElementById("lunaN").value);
+            const anN = parseInt(document.getElementById("anN").value);
+            const lunaM = parseInt(document.getElementById("lunaM").value);
+            const anM = parseInt(document.getElementById("anM").value);
 
-    const data60 = new Date(nastere);
-    data60.setFullYear(data60.getFullYear() + 60);
+            // Validări
+            if (!lunaN || !anN || !lunaM || !anM) {
+                showError('Completează toate câmpurile!');
+                return;
+            }
 
-    const data40 = new Date(munca);
-    data40.setFullYear(data40.getFullYear() + 40);
+            if (lunaN < 1 || lunaN > 12) {
+                showError('Luna nașterii trebuie să fie între 1 și 12!');
+                return;
+            }
 
-    const pensionare = (data60 > data40) ? data60 : data40;
+            if (lunaM < 1 || lunaM > 12) {
+                showError('Luna angajării trebuie să fie între 1 și 12!');
+                return;
+            }
 
-    const luni = [
-      "ianuarie","februarie","martie","aprilie","mai","iunie",
-      "iulie","august","septembrie","octombrie","noiembrie","decembrie"
-    ];
+            if (anN >= anM) {
+                showError('Anul nașterii trebuie să fie mai mic decât anul angajării!');
+                return;
+            }
 
-    const formatRO = (d) =>
-      luni[d.getMonth()] + " " + d.getFullYear();
+            // Creare date
+            const nastere = new Date(anN, lunaN - 1, 1);
+            const munca = new Date(anM, lunaM - 1, 1);
 
-    document.getElementById("rezultat").innerHTML =
-        "<b>Te poti pensiona in:</b><br><br>" +
-        formatRO(pensionare);
-}
-</script>
+            // Verificare logică
+            if (munca <= nastere) {
+                showError('Data angajării trebuie să fie după data nașterii!');
+                return;
+            }
 
+            // Calcule
+            const data60 = new Date(nastere);
+            data60.setFullYear(data60.getFullYear() + 60);
 
+            const data40 = new Date(munca);
+            data40.setFullYear(data40.getFullYear() + 40);
 
-</div><script>
-function calculeaza(){
+            // Pension date = max(60 ani, 40 ani cotizare)
+            const pensionare = (data60 > data40) ? data60 : data40;
 
-    const lunaN = parseInt(document.getElementById("lunaN").value);
-    const anN = parseInt(document.getElementById("anN").value);
+            // Calculează ani lucrați până azi
+            const azi = new Date();
+            let yearsWorked = azi.getFullYear() - anM;
+            if (azi.getMonth() < lunaM - 1) {
+                yearsWorked--;
+            }
 
-    const lunaM = parseInt(document.getElementById("lunaM").value);
-    const anM = parseInt(document.getElementById("anM").value);
+            // Calculează timp rămas
+            const timeDiff = pensionare - azi;
+            const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            const yearsLeft = Math.floor(daysLeft / 365.25);
+            const monthsLeft = Math.floor((daysLeft % 365.25) / 30.44);
 
-    if(!lunaN || !anN || !lunaM || !anM){
-        document.getElementById("rezultat").innerText =
-        "Completați toate câmpurile.";
-        return;
-    }
+            // Vârstă la pensionare
+            const ageAtPensionAge = pensionare.getFullYear() - anN;
 
-    if(lunaN < 1 || lunaN > 12 || lunaM < 1 || lunaM > 12){
-        document.getElementById("rezultat").innerText =
-        "Luna trebuie să fie între 1 și 12.";
-        return;
-    }
+            // Afișare rezultate
+            document.getElementById('pensionDate').textContent = formatDate(pensionare);
+            document.getElementById('yearsWorked').textContent = yearsWorked;
+            document.getElementById('ageValue').textContent = ageAtPensionAge;
+            document.getElementById('timeLeft').textContent = yearsLeft + ' ani și ' + monthsLeft + ' luni';
 
-    const nastere = new Date(anN, lunaN - 1, 1);
-    const munca = new Date(anM, lunaM - 1, 1);
+            // Afișare detalii
+            document.getElementById('birthDateDetail').textContent = formatDate(nastere);
+            document.getElementById('startWorkDetail').textContent = formatDate(munca);
+            document.getElementById('age60Detail').textContent = formatDate(data60);
+            document.getElementById('age40Detail').textContent = formatDate(data40);
 
-    const data60 = new Date(nastere);
-    data60.setFullYear(data60.getFullYear() + 60);
+            const condition = (data60 > data40) ? '60 de ani (mai tardiv)' : '40 de ani de cotizare (mai devreme)';
+            document.getElementById('condition').textContent = condition;
 
-    const data40 = new Date(munca);
-    data40.setFullYear(data40.getFullYear() + 40);
+            // Mesaj de vârstă
+            const ageMessage = ageAtPensionAge >= 63 ? '(pensionare standard)' : '(pensionare mai devreme)';
+            document.getElementById('ageAtPension').textContent = 'Vârstă: ' + ageAtPensionAge + ' ani ' + ageMessage;
 
-    const pensionare = (data60 > data40) ? data60 : data40;
+            resultsDiv.classList.add('show');
+            showSuccess('Calculele sunt gata!');
+        }
 
-    const luni = [
-      "ianuarie","februarie","martie","aprilie","mai","iunie",
-      "iulie","august","septembrie","octombrie","noiembrie","decembrie"
-    ];
-
-    const formatRO = (d) =>
-      luni[d.getMonth()] + " " + d.getFullYear();
-
-    document.getElementById("rezultat").innerHTML =
-        "<b>Te poti pensiona in:</b><br><br>" +
-        formatRO(pensionare);
-}
-</script></body></html>
+        // Reset form
+        form.addEventListener('reset', function () {
+            resultsDiv.classList.remove('show');
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
